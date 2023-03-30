@@ -11,6 +11,15 @@
   align-items: center;
   justify-content: center;
   border: 1px solid transparent;
+  cursor: pointer;
+  transition: border-color 0.25s;
 }
 
+.container:hover {
+  border-color: var(--purple-border-color);
+}
+
+.container:active{
+  background:  var(--blue-liner-bg-color);
+}
 

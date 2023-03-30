@@ -7,8 +7,12 @@
   flex-direction: column;
 
   --green-liner-bg-color: linear-gradient(135deg, #fff720 0%, #3cd500 100%);
+  --blue-liner-bg-color: linear-gradient(135deg, #C2FFD8 0%, #465EFB 100%);
   --black-font-color: #1e1e1e;
   --data-container-bg-color: #797979b8;
+  --purple-border-color: #646cff;
+  --green-border-color: #a2f253;
+
 }
 
 /* _____________________________________________ */

@@ -3,10 +3,11 @@ import styles from "./styles.module.css";
 interface HeaderTableElementProps {
   children: React.ReactNode;
   width?: number;
+  onClick?: () => void;
 }
 
 export default function HeaderTableElement(props: HeaderTableElementProps) {
-  const { children, width } = props;
+  const { children, width, onClick } = props;
 
   return (
     <div
@@ -14,6 +15,7 @@ export default function HeaderTableElement(props: HeaderTableElementProps) {
       style={{
         width: width ? `${width}px` : "auto",
       }}
+      onClick={onClick}
     >
       {children}
     </div>

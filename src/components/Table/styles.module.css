@@ -4,6 +4,7 @@
 }
 .tableContainer {
   height: 600px;
+  position: relative;
 }
 
 .refetchButton {

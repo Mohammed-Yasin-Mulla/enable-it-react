@@ -1,25 +1,18 @@
 import { useEffect, useState } from "react";
 import Button from "../Button";
-import DataTableElement from "../DataTableElement";
+import TableDataRow from "./TableDataRow";
 import HeaderTableElement from "../HeaderTableElement";
 import LoadingScreen from "../LoadingScreen";
 import Spacer from "../Spacer";
 import styles from "./styles.module.css";
-
-//
-
-interface TableRowInterface {
+import Arrow from "../../assets/SimpleArrow.svg";
+export interface TableRowInterface {
   ID: number;
   JobTitle: string;
   FirstNameLastName: string;
   Company: string;
   Email: string;
   Phone: string;
-}
-
-interface TableRowProps {
-  data: TableRowInterface;
-  removeValueWithID: (id: number) => void;
 }
 
 interface TableProps {
@@ -29,6 +22,7 @@ interface TableProps {
 export default function index(props: TableProps) {
   const { pageNumber = 0 } = props;
   const [apiData, setApiData] = useState([]);
+  console.log("💡 ~ index ~ apiData:", apiData);
   const [isLoading, setIsLoading] = useState(false);
   // used to refetch data after deleting a row
   const [refetch, setRefetch] = useState(false);
@@ -54,9 +48,52 @@ export default function index(props: TableProps) {
     setApiData(newData);
   };
 
+  const handleSort = (key: keyof TableRowInterface) => () => {
+    const sortedData = apiData.sort(
+      (a: TableRowInterface, b: TableRowInterface) => {
+        if (a[key] < b[key]) {
+          return -1;
+        }
+        if (a[key] > b[key]) {
+          return 1;
+        }
+        return 0;
+      }
+    );
+    setApiData([...sortedData]);
+  };
+
   return (
     <div className={styles.tableContainer}>
       {isLoading && <LoadingScreen />}
+
+      <div
+        style={{
+          position: "absolute",
+          left: -180,
+          top: -65,
+        }}
+      >
+        <p>
+          <b>📝 Note:</b> Click on the <br /> header to sort the data <br />
+          in ascending order.
+        </p>
+        <img src={Arrow} alt="arrow mark" />
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          left: -230,
+          top: 200,
+          width: 250,
+        }}
+      >
+        <b>📝 Note:</b> Click on remove row
+        <b />
+        <img src={Arrow} alt="arrow mark" />
+      </div>
+
       <div className={styles.refetchButton}>
         <Button
           children={"Refetch 🌀"}
@@ -65,39 +102,43 @@ export default function index(props: TableProps) {
       </div>
       <Spacer height={12} />
       <div className={styles.rowContainer}>
-        <HeaderTableElement children="ID 🪪" width={30} />
-        <HeaderTableElement children="Job Title 🔨" width={90} />
-        <HeaderTableElement children="Company 🏭" width={170} />
-        <HeaderTableElement children="Name 😄" width={150} />
-        <HeaderTableElement children="Email  📧" width={170} />
-        <HeaderTableElement children="Phone 📞" width={125} />
+        <HeaderTableElement
+          children="ID 🪪"
+          width={30}
+          onClick={handleSort("ID")}
+        />
+        <HeaderTableElement
+          children="Job Title 🔨"
+          width={90}
+          onClick={handleSort("JobTitle")}
+        />
+        <HeaderTableElement
+          children="Company 🏭"
+          width={170}
+          onClick={handleSort("Company")}
+        />
+        <HeaderTableElement
+          children="Name 😄"
+          width={150}
+          onClick={handleSort("FirstNameLastName")}
+        />
+        <HeaderTableElement
+          children="Email  📧"
+          width={170}
+          onClick={handleSort("Email")}
+        />
+        <HeaderTableElement
+          children="Phone 📞"
+          width={125}
+          onClick={handleSort("Phone")}
+        />
       </div>
       <Spacer height={30} />
       {apiData.map((data: TableRowInterface) => {
-        return <TableRow data={data} removeValueWithID={removeValueWithID} />;
+        return (
+          <TableDataRow data={data} removeValueWithID={removeValueWithID} />
+        );
       })}
     </div>
   );
 }
-
-const TableRow = (props: TableRowProps) => {
-  const { data, removeValueWithID } = props;
-  const { ID, JobTitle, FirstNameLastName, Email, Phone, Company } = data;
-
-  return (
-    <>
-      <div
-        className={styles.rowContainer}
-        onClick={() => removeValueWithID(ID)}
-      >
-        <DataTableElement children={ID} width={30} />
-        <DataTableElement children={JobTitle} width={90} />
-        <DataTableElement children={Company} width={170} />
-        <DataTableElement children={FirstNameLastName} width={150} />
-        <DataTableElement children={Email} width={170} />
-        <DataTableElement children={Phone} width={125} />
-      </div>
-      <Spacer height={5} />
-    </>
-  );
-};
