@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Button from "../Button";
 import DataTableElement from "../DataTableElement";
 import HeaderTableElement from "../HeaderTableElement";
 import LoadingScreen from "../LoadingScreen";
@@ -29,6 +30,8 @@ export default function index(props: TableProps) {
   const { pageNumber = 0 } = props;
   const [apiData, setApiData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  // used to refetch data after deleting a row
+  const [refetch, setRefetch] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -44,7 +47,7 @@ export default function index(props: TableProps) {
         console.error("~ index ~ err", err);
         setIsLoading(false);
       });
-  }, [pageNumber]);
+  }, [pageNumber, refetch]);
 
   const removeValueWithID = (id: number) => {
     const newData = apiData.filter((data: TableRowInterface) => data.ID !== id);
@@ -54,6 +57,13 @@ export default function index(props: TableProps) {
   return (
     <div className={styles.tableContainer}>
       {isLoading && <LoadingScreen />}
+      <div className={styles.refetchButton}>
+        <Button
+          children={"Refetch 🌀"}
+          onClick={() => setRefetch((prevData) => !prevData)}
+        />
+      </div>
+      <Spacer height={12} />
       <div className={styles.rowContainer}>
         <HeaderTableElement children="ID 🪪" width={30} />
         <HeaderTableElement children="Job Title 🔨" width={90} />

@@ -1,8 +1,12 @@
 .rowContainer {
-    display: flex;
-    gap: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
 }
 .tableContainer {
-    height: 540px;
+  height: 600px;
+}
 
+.refetchButton {
+  margin-left: auto;
+  width: fit-content;
 }
