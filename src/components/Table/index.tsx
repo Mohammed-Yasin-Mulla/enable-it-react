@@ -1,11 +1,11 @@
+import { NoteWithArrow } from './NoteWithArrow';
+import { TableHeadingRow } from "./TableHeadingRow";
 import { useEffect, useState } from "react";
 import Button from "../Button";
 import TableDataRow from "./TableDataRow";
-import HeaderTableElement from "../HeaderTableElement";
 import LoadingScreen from "../LoadingScreen";
 import Spacer from "../Spacer";
 import styles from "./styles.module.css";
-import Arrow from "../../assets/SimpleArrow.svg";
 export interface TableRowInterface {
   ID: number;
   JobTitle: string;
@@ -22,7 +22,6 @@ interface TableProps {
 export default function index(props: TableProps) {
   const { pageNumber = 0 } = props;
   const [apiData, setApiData] = useState([]);
-  console.log("💡 ~ index ~ apiData:", apiData);
   const [isLoading, setIsLoading] = useState(false);
   // used to refetch data after deleting a row
   const [refetch, setRefetch] = useState(false);
@@ -67,32 +66,7 @@ export default function index(props: TableProps) {
     <div className={styles.tableContainer}>
       {isLoading && <LoadingScreen />}
 
-      <div
-        style={{
-          position: "absolute",
-          left: -180,
-          top: -65,
-        }}
-      >
-        <p>
-          <b>📝 Note:</b> Click on the <br /> header to sort the data <br />
-          in ascending order.
-        </p>
-        <img src={Arrow} alt="arrow mark" />
-      </div>
-
-      <div
-        style={{
-          position: "absolute",
-          left: -230,
-          top: 200,
-          width: 250,
-        }}
-      >
-        <b>📝 Note:</b> Click on remove row
-        <b />
-        <img src={Arrow} alt="arrow mark" />
-      </div>
+     <NoteWithArrow    />
 
       <div className={styles.refetchButton}>
         <Button
@@ -100,40 +74,13 @@ export default function index(props: TableProps) {
           onClick={() => setRefetch((prevData) => !prevData)}
         />
       </div>
+
       <Spacer height={12} />
-      <div className={styles.rowContainer}>
-        <HeaderTableElement
-          children="ID 🪪"
-          width={30}
-          onClick={handleSort("ID")}
-        />
-        <HeaderTableElement
-          children="Job Title 🔨"
-          width={90}
-          onClick={handleSort("JobTitle")}
-        />
-        <HeaderTableElement
-          children="Company 🏭"
-          width={170}
-          onClick={handleSort("Company")}
-        />
-        <HeaderTableElement
-          children="Name 😄"
-          width={150}
-          onClick={handleSort("FirstNameLastName")}
-        />
-        <HeaderTableElement
-          children="Email  📧"
-          width={170}
-          onClick={handleSort("Email")}
-        />
-        <HeaderTableElement
-          children="Phone 📞"
-          width={125}
-          onClick={handleSort("Phone")}
-        />
-      </div>
+
+      <TableHeadingRow handleSort={handleSort} />
+
       <Spacer height={30} />
+      
       {apiData.map((data: TableRowInterface) => {
         return (
           <TableDataRow data={data} removeValueWithID={removeValueWithID} />
