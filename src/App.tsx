@@ -17,9 +17,11 @@ function App() {
     <div id="container">
       <URL pageNumber={count} setPageNumber={setCount} />
       <Spacer height={17} />
-      <Table />
+
+      <Table  pageNumber={count}/>
 
       <Spacer height={17} />
+
       <div className="btnContainer">
         <Button
           disabled={count <= 0}

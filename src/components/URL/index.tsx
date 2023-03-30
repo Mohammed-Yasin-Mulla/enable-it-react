@@ -20,6 +20,7 @@ export default function (props: URLProps) {
         }}
         type="number"
         min={0}
+
       />
       /next
     </div>
