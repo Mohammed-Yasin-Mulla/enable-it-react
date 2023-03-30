@@ -18,6 +18,7 @@ interface TableRowInterface {
 
 interface TableRowProps {
   data: TableRowInterface;
+  removeValueWithID: (id: number) => void;
 }
 
 interface TableProps {
@@ -28,7 +29,6 @@ export default function index(props: TableProps) {
   const { pageNumber = 0 } = props;
   const [apiData, setApiData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  // console.log("💡 ~ index ~ apiData:", apiData);
 
   useEffect(() => {
     setIsLoading(true);
@@ -41,10 +41,15 @@ export default function index(props: TableProps) {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log("💡 ~ index ~ err", err);
+        console.error("~ index ~ err", err);
         setIsLoading(false);
       });
   }, [pageNumber]);
+
+  const removeValueWithID = (id: number) => {
+    const newData = apiData.filter((data: TableRowInterface) => data.ID !== id);
+    setApiData(newData);
+  };
 
   return (
     <div className={styles.tableContainer}>
@@ -59,17 +64,22 @@ export default function index(props: TableProps) {
       </div>
       <Spacer height={30} />
       {apiData.map((data: TableRowInterface) => {
-        return <TableRow data={data} />;
+        return <TableRow data={data} removeValueWithID={removeValueWithID} />;
       })}
     </div>
   );
 }
 
 const TableRow = (props: TableRowProps) => {
-  const { ID, JobTitle, FirstNameLastName, Email, Phone, Company } = props.data;
+  const { data, removeValueWithID } = props;
+  const { ID, JobTitle, FirstNameLastName, Email, Phone, Company } = data;
+
   return (
     <>
-      <div className={styles.rowContainer}>
+      <div
+        className={styles.rowContainer}
+        onClick={() => removeValueWithID(ID)}
+      >
         <DataTableElement children={ID} width={30} />
         <DataTableElement children={JobTitle} width={90} />
         <DataTableElement children={Company} width={170} />
