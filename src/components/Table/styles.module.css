@@ -1,0 +1,8 @@
+.rowContainer {
+    display: flex;
+    gap: 0.5rem;
+}
+.tableContainer {
+    height: 450px;
+
+}
