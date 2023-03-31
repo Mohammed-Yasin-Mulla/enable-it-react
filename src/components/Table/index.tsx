@@ -1,4 +1,4 @@
-import { NoteWithArrow } from './NoteWithArrow';
+import { NoteWithArrow } from "./NoteWithArrow";
 import { TableHeadingRow } from "./TableHeadingRow";
 import { useEffect, useState } from "react";
 import Button from "../Button";
@@ -48,17 +48,26 @@ export default function index(props: TableProps) {
   };
 
   const handleSort = (key: keyof TableRowInterface) => () => {
-    const sortedData = apiData.sort(
-      (a: TableRowInterface, b: TableRowInterface) => {
-        if (a[key] < b[key]) {
-          return -1;
+    let sortedData = [];
+    if (key != "ID") {
+      sortedData = apiData.sort(
+        (a: TableRowInterface, b: TableRowInterface) => {
+          if (a[key] < b[key]) {
+            return -1;
+          }
+          if (a[key] > b[key]) {
+            return 1;
+          }
+          return 0;
         }
-        if (a[key] > b[key]) {
-          return 1;
+      );
+    } else {
+      sortedData = apiData.sort(
+        (a: TableRowInterface, b: TableRowInterface) => {
+          return a[key] - b[key];
         }
-        return 0;
-      }
-    );
+      );
+    }
     setApiData([...sortedData]);
   };
 
@@ -66,7 +75,7 @@ export default function index(props: TableProps) {
     <div className={styles.tableContainer}>
       {isLoading && <LoadingScreen />}
 
-     <NoteWithArrow    />
+      <NoteWithArrow />
 
       <div className={styles.refetchButton}>
         <Button
@@ -80,7 +89,7 @@ export default function index(props: TableProps) {
       <TableHeadingRow handleSort={handleSort} />
 
       <Spacer height={30} />
-      
+
       {apiData.map((data: TableRowInterface) => {
         return (
           <TableDataRow data={data} removeValueWithID={removeValueWithID} />
